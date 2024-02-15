@@ -1,18 +1,16 @@
 package com.example.collegemanagementapp;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
-public class StudentController {
-
+@Repository
+public class StudentRepository {
     Map<Integer, student> studentDb=new HashMap<>();
 
-    @PostMapping("/student/add")
-    public String addStudent(@RequestBody student std)
-    {
+    public String addStudent(student std) {
         if(studentDb.containsKey(std.getId()))
         {
             return "student already registered";
@@ -21,21 +19,20 @@ public class StudentController {
         return "student registered successfully";
     }
 
-    @GetMapping("/student/get")
-    public student getStudent(@RequestParam("id") int id)
-    {
-        return studentDb.get(id);
+    public student getStudent(int id) {
+        if(studentDb.containsKey(id))
+        {
+            return studentDb.get(id);
+        }
+        return null;
     }
 
-
-    @GetMapping("/student/get/{name}/{q}")
-    public student getStudentByName(@PathVariable("name") String name,@PathVariable("q") int age)
-    {
+    public student getStudentByName(String name) {
         for(Integer x:studentDb.keySet())
         {
             if(studentDb.get(x).getName().equals(name))
             {
-                studentDb.get(x).setAge(age);
+
                 return studentDb.get(x);
             }
         }
